@@ -1,0 +1,762 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سفريات الجنوب الكبير - المنصة الرسمية</title>
+    <!-- Google Fonts Arabic Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-bus-simple brand-icon"></i>
+                <div class="brand-text">
+                    <span class="title">سفريات الجنوب الكبير</span>
+                    <span class="subtitle">تنقل بسهولة عبر خط الجنوب</span>
+                </div>
+            </div>
+
+            <nav class="nav-links" id="navLinks">
+                <button class="nav-btn active" data-view="homeView"><i class="fa-solid fa-house"></i> الرئيسية</button>
+                <button class="nav-btn" data-view="searchTripsView"><i class="fa-solid fa-magnifying-glass"></i> البحث عن رحلة</button>
+                <button class="nav-btn" data-view="reviewsView"><i class="fa-solid fa-star"></i> التقييمات</button>
+                <button class="nav-btn" data-view="aboutView"><i class="fa-solid fa-circle-info"></i> من نحن</button>
+            </nav>
+
+            <div class="auth-actions">
+                <div id="userLoggedOut">
+                    <button class="btn btn-primary" onclick="openModal('loginModal')">
+                        <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
+                    </button>
+                </div>
+                <div id="userLoggedIn" class="user-profile-menu hidden">
+                    <span class="user-greeting" id="userGreeting">مرحباً</span>
+                    <button class="btn btn-outline" onclick="openProfileView()">
+                        <i class="fa-solid fa-user"></i> الملف الشخصي
+                    </button>
+                    <button class="btn btn-danger" onclick="handleLogout()">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> خروج
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner for Maintenance Mode -->
+    <div id="maintenanceBanner" class="banner banner-warning hidden">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="maintenanceBannerText">التطبيق تحت الصيانة حالياً، نعود قريباً</span>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content container">
+
+        <!-- ==================== HOME VIEW ==================== -->
+        <section id="homeView" class="view-section">
+
+            <!-- REGULAR USER HOME -->
+            <div id="regularUserHome">
+                <div class="hero-card">
+                    <div class="hero-text">
+                        <h1>حجز رحلاتك ووسيلة تنقلك عبر خطوط الجنوب الكبير</h1>
+                        <p>تامنغست • عين صالح • اينغر • تيط • اقبلي • اولف • رقان • ادرار</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-lg btn-primary" onclick="switchView('searchTripsView')">
+                                <i class="fa-solid fa-magnifying-glass"></i> البحث والحجز الآن
+                            </button>
+                            <button class="btn btn-lg btn-secondary" onclick="openModal('requestRideModal')">
+                                <i class="fa-solid fa-circle-plus"></i> طلب رحلة خاصة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sections Grid -->
+                <div class="sections-grid">
+                    <!-- Passenger Card -->
+                    <div class="card card-action" onclick="switchView('searchTripsView')">
+                        <div class="card-icon primary-bg"><i class="fa-solid fa-magnifying-glass"></i></div>
+                        <div class="card-info">
+                            <h3>البحث عن رحلة</h3>
+                            <p>عرض جميع رحلات السائقين وحجز مقعد بسهولة</p>
+                        </div>
+                    </div>
+
+                    <!-- My Bookings Card -->
+                    <div class="card card-action" onclick="switchView('myBookingsView')">
+                        <div class="card-icon secondary-bg"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="card-info">
+                            <h3>حجوزاتي</h3>
+                            <p>متابعة حجوزاتك والتواصل المباشر مع السائق</p>
+                        </div>
+                    </div>
+
+                    <!-- My Requests Card -->
+                    <div class="card card-action" onclick="switchView('myRequestsView')">
+                        <div class="card-icon warning-bg"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div class="card-info">
+                            <h3>طلباتي الخاصة</h3>
+                            <p>إدارة وتعديل وحذف طلبات الرحلات التي أنشأتها</p>
+                        </div>
+                    </div>
+
+                    <!-- Driver Add Trip -->
+                    <div class="card card-action driver-only" onclick="openModal('addTripModal')">
+                        <div class="card-icon accent-bg"><i class="fa-solid fa-plus"></i></div>
+                        <div class="card-info">
+                            <h3>إضافة رحلة جديدة (للسائقين)</h3>
+                            <p>انشر رحلتك واستقبل حجوزات الركاب</p>
+                        </div>
+                    </div>
+
+                    <!-- Driver Requests -->
+                    <div class="card card-action driver-only" onclick="switchView('driverRequestsView')">
+                        <div class="card-icon info-bg"><i class="fa-solid fa-users"></i></div>
+                        <div class="card-info">
+                            <h3>طلبات الركاب</h3>
+                            <p>استعراض طلبات الركاب المفتوحة وقبولها</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN DEDICATED DASHBOARD (Hidden for regular users) -->
+            <div id="adminDashboardHome" class="hidden">
+                <div class="admin-hero">
+                    <i class="fa-solid fa-shield-halved admin-shield"></i>
+                    <div>
+                        <h2>لوحة تحكم الأدمن الشاملة 🛡️</h2>
+                        <p>إدارة السائقين والركاب، التقييمات، الرحلات، وإعدادات المنظومة بالكامل</p>
+                    </div>
+                </div>
+
+                <div class="admin-grid">
+                    <div class="card card-action" onclick="switchView('adminUsersView')">
+                        <div class="card-icon primary-bg"><i class="fa-solid fa-users-gear"></i></div>
+                        <div class="card-info">
+                            <h3>إدارة السائقين والركاب</h3>
+                            <p>اعتماد السائقين، تفعيل وحظر الحسابات، ومراقبة المستخدمين</p>
+                        </div>
+                    </div>
+
+                    <div class="card card-action" onclick="switchView('adminReviewsView')">
+                        <div class="card-icon accent-bg"><i class="fa-solid fa-star"></i></div>
+                        <div class="card-info">
+                            <h3>إدارة التقييمات والآراء</h3>
+                            <p>الاطلاع على التقييمات، إخفائها عن العموم أو حذفها نهائياً</p>
+                        </div>
+                    </div>
+
+                    <div class="card card-action" onclick="switchView('searchTripsView')">
+                        <div class="card-icon info-bg"><i class="fa-solid fa-route"></i></div>
+                        <div class="card-info">
+                            <h3>مراقبة كافة الرحلات والطلبات</h3>
+                            <p>متابعة كافة رحلات السائقين وطلبات الركاب المعروضة بالمنظومة</p>
+                        </div>
+                    </div>
+
+                    <div class="card card-action" onclick="openModal('adminSettingsModal')">
+                        <div class="card-icon warning-bg"><i class="fa-solid fa-sliders"></i></div>
+                        <div class="card-info">
+                            <h3>إعدادات المنظومة والصيانة</h3>
+                            <p>تفعيل وضع الصيانة، وإدارة صلاحيات التسجيل وإضافة الرحلات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== SEARCH TRIPS VIEW ==================== -->
+        <section id="searchTripsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-magnifying-glass"></i> الرحلات المتاحة</h2>
+                <div class="filter-box">
+                    <select id="filterFromCity" onchange="renderTrips()">
+                        <option value="">جميع مدن المغادرة</option>
+                        <option value="تامنغست">تامنغست</option>
+                        <option value="عين صالح">عين صالح</option>
+                        <option value="اينغر">اينغر</option>
+                        <option value="تيط">تيط</option>
+                        <option value="اقبلي">اقبلي</option>
+                        <option value="اولف">اولف</option>
+                        <option value="رقان">رقان</option>
+                        <option value="ادرار">ادرار</option>
+                    </select>
+
+                    <select id="filterToCity" onchange="renderTrips()">
+                        <option value="">جميع مدن الوصول</option>
+                        <option value="تامنغست">تامنغست</option>
+                        <option value="عين صالح">عين صالح</option>
+                        <option value="اينغر">اينغر</option>
+                        <option value="تيط">تيط</option>
+                        <option value="اقبلي">اقبلي</option>
+                        <option value="اولف">اولف</option>
+                        <option value="رقان">رقان</option>
+                        <option value="ادرار">ادرار</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="tripsList" class="trips-grid">
+                <!-- Trips rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== MY BOOKINGS VIEW ==================== -->
+        <section id="myBookingsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-list-check"></i> حجوزاتي الحالية</h2>
+            </div>
+            <div id="bookingsList" class="bookings-grid">
+                <!-- Bookings rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== MY REQUESTS VIEW ==================== -->
+        <section id="myRequestsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-clipboard-list"></i> طلباتي الخاصة</h2>
+                <button class="btn btn-primary" onclick="openModal('requestRideModal')">
+                    <i class="fa-solid fa-plus"></i> طلب رحلة جديدة
+                </button>
+            </div>
+            <div id="myRequestsList" class="requests-grid">
+                <!-- My requests rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== DRIVER REQUESTS VIEW ==================== -->
+        <section id="driverRequestsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-users"></i> طلبات الركاب المفتوحة</h2>
+            </div>
+            <div id="driverRequestsList" class="requests-grid">
+                <!-- Requests rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== REVIEWS VIEW ==================== -->
+        <section id="reviewsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-star"></i> آراء وتقييمات العملاء</h2>
+                <button class="btn btn-primary" onclick="openModal('addReviewModal')">
+                    <i class="fa-solid fa-pen"></i> أضف رأيك
+                </button>
+            </div>
+            <div id="reviewsList" class="reviews-grid">
+                <!-- Reviews rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== ABOUT VIEW ==================== -->
+        <section id="aboutView" class="view-section hidden">
+            <div class="about-card">
+                <h2>من نحن - منصة سفريات الجنوب الكبير</h2>
+                <p>المنصة والأداة الرقمية الأولى المخصصة لربط المسافرين والسائقين عبر مدن وولايات الجنوب الكبير.</p>
+                <div class="contact-info-box">
+                    <p><i class="fa-solid fa-envelope"></i> البريد الرسمي للدعم: <strong>abstarking@gmail.com</strong></p>
+                    <p><i class="fa-solid fa-phone"></i> رقم التواصل: <strong>0550000000</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ADMIN USERS VIEW ==================== -->
+        <section id="adminUsersView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-users-gear"></i> إدارة المستخدمين والسائقين</h2>
+                <button class="btn btn-outline" onclick="switchView('homeView')">العودة للرئيسية</button>
+            </div>
+
+            <!-- Admin Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="stat-num" id="statTotalUsers">0</span>
+                    <span class="stat-label">إجمالي المستخدمين</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="statApprovedDrivers">0</span>
+                    <span class="stat-label">سائقين معتمدين</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="statDisabledUsers">0</span>
+                    <span class="stat-label">حسابات معطلة</span>
+                </div>
+            </div>
+
+            <div id="adminUsersList" class="admin-users-list">
+                <!-- Admin user cards rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== ADMIN REVIEWS VIEW ==================== -->
+        <section id="adminReviewsView" class="view-section hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-star"></i> إدارة الآراء والتقييمات</h2>
+                <button class="btn btn-outline" onclick="switchView('homeView')">العودة للرئيسية</button>
+            </div>
+            <div id="adminReviewsList" class="admin-reviews-list">
+                <!-- Admin reviews rendered dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- LOGIN / REGISTER MODAL -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="authModalTitle">تسجيل الدخول</h3>
+                <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-switch">
+                    <button id="tabLoginBtn" class="tab-btn active" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+                    <button id="tabRegisterBtn" class="tab-btn" onclick="switchAuthTab('register')">إنشاء حساب</button>
+                </div>
+
+                <form id="authForm" onsubmit="handleEmailAuth(event)">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="authEmail" required placeholder="example@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="authPassword" required placeholder="••••••••">
+                    </div>
+
+                    <div id="registerFields" class="hidden">
+                        <div class="form-group">
+                            <label>الاسم الكامل</label>
+                            <input type="text" id="authName" placeholder="أحمد بن محمد">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="tel" id="authPhone" placeholder="05XX XXX XXX">
+                        </div>
+                        <div class="form-group">
+                            <label>نوع الحساب</label>
+                            <select id="authRole">
+                                <option value="passenger">راكب</option>
+                                <option value="driver">سائق</option>
+                                <option value="both">راكب وسائق</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p id="authError" class="alert alert-danger hidden"></p>
+
+                    <button type="submit" id="authSubmitBtn" class="btn btn-primary btn-block">
+                        تسجيل الدخول
+                    </button>
+                </form>
+
+                <div class="divider"><span>أو</span></div>
+
+                <button class="btn btn-google btn-block" onclick="handleGoogleSignIn()">
+                    <i class="fa-brands fa-google"></i> الدخول باستخدام حساب Google
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKING MODAL -->
+    <div id="bookingModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تأكيد حجز مقعد</h3>
+                <button class="close-btn" onclick="closeModal('bookingModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="bookingTripSummary" class="trip-summary-box"></div>
+                <div class="form-group">
+                    <label>عدد المقاعد المطلوبة</label>
+                    <input type="number" id="bookingSeatsInput" min="1" max="10" value="1">
+                </div>
+                <p id="bookingError" class="alert alert-danger hidden"></p>
+                <button class="btn btn-primary btn-block" onclick="submitBooking()">تأكيد الحجز الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD TRIP MODAL (DRIVERS) -->
+    <div id="addTripModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة رحلة جديدة</h3>
+                <button class="close-btn" onclick="closeModal('addTripModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleCreateTrip(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>من مدينة</label>
+                            <select id="tripFromCity" required>
+                                <option value="تامنغست">تامنغست</option>
+                                <option value="عين صالح">عين صالح</option>
+                                <option value="اينغر">اينغر</option>
+                                <option value="تيط">تيط</option>
+                                <option value="اقبلي">اقبلي</option>
+                                <option value="اولف">اولف</option>
+                                <option value="رقان">رقان</option>
+                                <option value="ادرار">ادرار</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>إلى مدينة</label>
+                            <select id="tripToCity" required>
+                                <option value="عين صالح">عين صالح</option>
+                                <option value="تامنغست">تامنغست</option>
+                                <option value="اينغر">اينغر</option>
+                                <option value="تيط">تيط</option>
+                                <option value="اقبلي">اقبلي</option>
+                                <option value="اولف">اولف</option>
+                                <option value="رقان">رقان</option>
+                                <option value="ادرار">ادرار</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>إجمالي المقاعد</label>
+                            <input type="number" id="tripTotalSeats" min="1" value="4" required>
+                        </div>
+                        <div class="form-group">
+                            <label>سعر المقعد (دج)</label>
+                            <input type="number" id="tripPrice" min="0" value="1000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>تاريخ ووقت الانطلاق</label>
+                        <input type="datetime-local" id="tripDepartureTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ملاحظات إضافية</label>
+                        <textarea id="tripNotes" rows="2" placeholder="مكان التجمع، الأمتعة المسموحة..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">نشر الرحلة</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- REQUEST RIDE MODAL -->
+    <div id="requestRideModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>طلب رحلة خاصة</h3>
+                <button class="close-btn" onclick="closeModal('requestRideModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleCreateRequest(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>من مدينة</label>
+                            <select id="reqFromCity" required>
+                                <option value="تامنغست">تامنغست</option>
+                                <option value="عين صالح">عين صالح</option>
+                                <option value="اينغر">اينغر</option>
+                                <option value="تيط">تيط</option>
+                                <option value="اقبلي">اقبلي</option>
+                                <option value="اولف">اولف</option>
+                                <option value="رقان">رقان</option>
+                                <option value="ادرار">ادرار</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>إلى مدينة</label>
+                            <select id="reqToCity" required>
+                                <option value="عين صالح">عين صالح</option>
+                                <option value="تامنغست">تامنغست</option>
+                                <option value="اينغر">اينغر</option>
+                                <option value="تيط">تيط</option>
+                                <option value="اقبلي">اقبلي</option>
+                                <option value="اولف">اولف</option>
+                                <option value="رقان">رقان</option>
+                                <option value="ادرار">ادرار</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>عدد المقاعد المطلوبة</label>
+                        <input type="number" id="reqSeatsNeeded" min="1" value="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الموعد المطلوب</label>
+                        <input type="datetime-local" id="reqDesiredTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ملاحظات</label>
+                        <textarea id="reqNotes" rows="2" placeholder="أي تفاصيل خاصة بالحركة..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">إرسال الطلب</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD REVIEW MODAL -->
+    <div id="addReviewModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة تقييم ورأي</h3>
+                <button class="close-btn" onclick="closeModal('addReviewModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleCreateReview(event)">
+                    <div class="form-group">
+                        <label>التقييم (من 1 إلى 5 نجوم)</label>
+                        <select id="reviewRating">
+                            <option value="5">⭐⭐⭐⭐⭐ 5/5 ممتاز جداً</option>
+                            <option value="4">⭐⭐⭐⭐ 4/5 ممتاز</option>
+                            <option value="3">⭐⭐⭐ 3/5 جيد</option>
+                            <option value="2">⭐⭐ 2/5 مقبول</option>
+                            <option value="1">⭐ 1/5 ضعيف</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>تعليقك ورأيك</label>
+                        <textarea id="reviewComment" rows="3" required placeholder="اكتب تجريتك معنا..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">إرسال التقييم</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN SETTINGS MODAL -->
+    <div id="adminSettingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إعدادات المنظومة والصيانة</h3>
+                <button class="close-btn" onclick="closeModal('adminSettingsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <div>
+                        <strong>تفعيل وضع الصيانة</strong>
+                        <p>تجميد الاستخدام وإبراز رسالة الصيانة</p>
+                    </div>
+                    <input type="checkbox" id="setMaintenanceMode">
+                </div>
+
+                <div class="form-group">
+                    <label>رسالة الصيانة</label>
+                    <input type="text" id="setMaintenanceMessage" value="التطبيق تحت الصيانة حالياً، نعود قريباً">
+                </div>
+
+                <div class="setting-item">
+                    <div>
+                        <strong>السماح بالتسجيل الجديد</strong>
+                        <p>تمكين أو إيقاف إنشاء حسابات جديدة</p>
+                    </div>
+                    <input type="checkbox" id="setAllowRegistrations" checked>
+                </div>
+
+                <div class="setting-item">
+                    <div>
+                        <strong>السماح بإضافة رحلات</strong>
+                        <p>تمكين السائقين من نشر رحلات جديدة</p>
+                    </div>
+                    <input type="checkbox" id="setAllowTrips" checked>
+                </div>
+
+                <button class="btn btn-primary btn-block" onclick="saveAdminSettings()">حفظ الإعدادات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Compat SDKs (Compatible with file:// local opening and web servers) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+
+    <datalist id="southCitiesList">
+<option value="أدرار (أدرار)"></option>
+<option value="أولاد أحمد تيمي (أدرار)"></option>
+<option value="بودة (أدرار)"></option>
+<option value="فنوغيل (أدرار)"></option>
+<option value="تامنطيط (أدرار)"></option>
+<option value="تامست (أدرار)"></option>
+<option value="زاوية كنتة (أدرار)"></option>
+<option value="ان زغمير (أدرار)"></option>
+<option value="رقان (أدرار)"></option>
+<option value="سالي (أدرار)"></option>
+<option value="أولف (أدرار)"></option>
+<option value="تيمقطن (أدرار)"></option>
+<option value="أقبلي (أدرار)"></option>
+<option value="تيط (أدرار)"></option>
+<option value="تسابيت (أدرار)"></option>
+<option value="السبع (أدرار)"></option>
+<option value="الأغواط (الأغواط)"></option>
+<option value="الخنق (الأغواط)"></option>
+<option value="سيدي مخلوف (الأغواط)"></option>
+<option value="العسافية (الأغواط)"></option>
+<option value="حاسي الرمل (الأغواط)"></option>
+<option value="بليل (الأغواط)"></option>
+<option value="عين ماضي (الأغواط)"></option>
+<option value="تاجرونة (الأغواط)"></option>
+<option value="تاجموت (الأغواط)"></option>
+<option value="الحويطة (الأغواط)"></option>
+<option value="وادي مرة (الأغواط)"></option>
+<option value="وادي مزي (الأغواط)"></option>
+<option value="الغيشة (الأغواط)"></option>
+<option value="أفلو (الأغواط)"></option>
+<option value="سيدي بوزيد (الأغواط)"></option>
+<option value="السبق (الأغواط)"></option>
+<option value="بريدة (الأغواط)"></option>
+<option value="الحاج مشري (الأغواط)"></option>
+<option value="عين سيدي علي (الأغواط)"></option>
+<option value="قلتة سيدي سعد (الأغواط)"></option>
+<option value="بيضاء برج (الأغواط)"></option>
+<option value="بسكرة (بسكرة)"></option>
+<option value="الحاجب (بسكرة)"></option>
+<option value="سيدي عقبة (بسكرة)"></option>
+<option value="شتمة (بسكرة)"></option>
+<option value="الحوش (بسكرة)"></option>
+<option value="عين الناقة (بسكرة)"></option>
+<option value="مشونش (بسكرة)"></option>
+<option value="مزيرعة (بسكرة)"></option>
+<option value="طولقة (بسكرة)"></option>
+<option value="بوشقرون (بسكرة)"></option>
+<option value="برج بن عزوز (بسكرة)"></option>
+<option value="ليشانة (بسكرة)"></option>
+<option value="الشعيبة (بسكرة)"></option>
+<option value="أورلال (بسكرة)"></option>
+<option value="أوماس (بسكرة)"></option>
+<option value="مخادمة (بسكرة)"></option>
+<option value="ليوة (بسكرة)"></option>
+<option value="مليلي (بسكرة)"></option>
+<option value="الفيض (بسكرة)"></option>
+<option value="جمورة (بسكرة)"></option>
+<option value="برانيس (بسكرة)"></option>
+<option value="بشار (بشار)"></option>
+<option value="القنادسة (بشار)"></option>
+<option value="تاغيت (بشار)"></option>
+<option value="لحمر (بشار)"></option>
+<option value="بوكايس (بشار)"></option>
+<option value="موغل (بشار)"></option>
+<option value="العبادلة (بشار)"></option>
+<option value="عرق فراج (بشار)"></option>
+<option value="مشرع هواري بومدين (بشار)"></option>
+<option value="بني ونيف (بشار)"></option>
+<option value="تامنغست (تامنغست)"></option>
+<option value="عين أمقل (تامنغست)"></option>
+<option value="أبلسة (تامنغست)"></option>
+<option value="تاظروك (تامنغست)"></option>
+<option value="إدلس (تامنغست)"></option>
+<option value="ورقلة (ورقلة)"></option>
+<option value="الرويسات (ورقلة)"></option>
+<option value="حاسي مسعود (ورقلة)"></option>
+<option value="عين البيضاء (ورقلة)"></option>
+<option value="سيدي خويلد (ورقلة)"></option>
+<option value="حاسي بن عبد الله (ورقلة)"></option>
+<option value="البرمة (ورقلة)"></option>
+<option value="إليزي (إليزي)"></option>
+<option value="إن أميناس (إليزي)"></option>
+<option value="برج عمر إدريس (إليزي)"></option>
+<option value="الدبداب (إليزي)"></option>
+<option value="تندوف (تندوف)"></option>
+<option value="أم العسل (تندوف)"></option>
+<option value="الوادي (الوادي)"></option>
+<option value="كواشين (الوادي)"></option>
+<option value="البياضة (الوادي)"></option>
+<option value="الرباح (الوادي)"></option>
+<option value="العقلة (الوادي)"></option>
+<option value="النخلة (الوادي)"></option>
+<option value="دبيلة (الوادي)"></option>
+<option value="حاسي خليفة (الوادي)"></option>
+<option value="قمار (الوادي)"></option>
+<option value="الرقيبة (الوادي)"></option>
+<option value="ورماس (الوادي)"></option>
+<option value="المقرن (الوادي)"></option>
+<option value="سيدي عون (الوادي)"></option>
+<option value="أميه ونسة (الوادي)"></option>
+<option value="وادي العلندة (الوادي)"></option>
+<option value="طالب العربي (الوادي)"></option>
+<option value="بني قشة (الوادي)"></option>
+<option value="دوار الماء (الوادي)"></option>
+<option value="غرداية (غرداية)"></option>
+<option value="القرارة (غرداية)"></option>
+<option value="متليلي (غرداية)"></option>
+<option value="سبسب (غرداية)"></option>
+<option value="بونورة (غرداية)"></option>
+<option value="العطف (غرداية)"></option>
+<option value="ضاية بن ضحوة (غرداية)"></option>
+<option value="زلفانة (غرداية)"></option>
+<option value="المنصورة (غرداية)"></option>
+<option value="تيميمون (تيميمون)"></option>
+<option value="أولاد سعيد (تيميمون)"></option>
+<option value="أوقروت (تيميمون)"></option>
+<option value="دلدول (تيميمون)"></option>
+<option value="المطارفة (تيميمون)"></option>
+<option value="شروين (تيميمون)"></option>
+<option value="طالمين (تيميمون)"></option>
+<option value="قصر قدور (تيميمون)"></option>
+<option value="تينركوك (تيميمون)"></option>
+<option value="أولاد عيسى (تيميمون)"></option>
+<option value="برج باجي مختار (برج باجي مختار)"></option>
+<option value="تيمياوين (برج باجي مختار)"></option>
+<option value="أولاد جلال (أولاد جلال)"></option>
+<option value="الدوسن (أولاد جلال)"></option>
+<option value="الشعيبة (أولاد جلال)"></option>
+<option value="سيدي خالد (أولاد جلال)"></option>
+<option value="البسباس (أولاد جلال)"></option>
+<option value="رأس الميعاد (أولاد جلال)"></option>
+<option value="بني عباس (بني عباس)"></option>
+<option value="تامترت (بني عباس)"></option>
+<option value="كرزاز (بني عباس)"></option>
+<option value="تيمودي (بني عباس)"></option>
+<option value="بني يخلف (بني عباس)"></option>
+<option value="أولاد خضير (بني عباس)"></option>
+<option value="القصابي (بني عباس)"></option>
+<option value="الواتة (بني عباس)"></option>
+<option value="إقلي (بني عباس)"></option>
+<option value="تبلبلة (بني عباس)"></option>
+<option value="إن صالح (إن صالح)"></option>
+<option value="فقارة الزاوية (إن صالح)"></option>
+<option value="إن غار (إن صالح)"></option>
+<option value="إن قزام (إن قزام)"></option>
+<option value="تين زواتين (إن قزام)"></option>
+<option value="توقرت (توقرت)"></option>
+<option value="النزلة (توقرت)"></option>
+<option value="تبسبست (توقرت)"></option>
+<option value="الزاوية العابدية (توقرت)"></option>
+<option value="تماسين (توقرت)"></option>
+<option value="بليدات عمر (توقرت)"></option>
+<option value="المقارن (توقرت)"></option>
+<option value="سيدي سليمان (توقرت)"></option>
+<option value="الطيبات (توقرت)"></option>
+<option value="المنقر (توقرت)"></option>
+<option value="بنوة (توقرت)"></option>
+<option value="جانت (جانت)"></option>
+<option value="برج الحواس (جانت)"></option>
+<option value="المنيعة (المنيعة)"></option>
+<option value="حاسي القارة (المنيعة)"></option>
+<option value="حاسي الفحل (المنيعة)"></option>
+    </datalist>
+</body>
+</html>
